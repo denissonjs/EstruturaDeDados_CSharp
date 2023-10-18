@@ -3,41 +3,48 @@ using System;
 using System.Collection.Generic;
 internal class Estruturas_Chaveadas
 {
-    class Dictionary
+     class Dictionary
     {
         /*  Como mensionei no readme, dicionários funcionam com chave e valor.
-            Um uso particularmente comum de dicionários é no relacionamento 
-            de colunas banco de dados com colunas de um DataGridView, que nada mais
-            são que a representação visual de uma tabela em aplicações Windows form. */
+        Um uso particularmente comum de dicionários é no relacionamento de colunas
+        banco de dados com colunas de um DataGridView, que nada mais são que a
+        representação visual de uma tabela em aplicações Windows form. */
 
-        /* Apesar de os dados serem fictícios, esse exemplo de aplicação foi usado algumas 
-           vezes no projeto "Rotina9817_AnaliseDeCredito" disponível também no meu GitHub. */
+        /* Apesar de os dados serem fictícios, esse exemplo de aplicação 
+            foi usado algumas vezes no projeto "Rotina9817_AnaliseDeCredito" 
+            disponível também no meu GitHub. */
 
-        // Criamos um DataGridView.
-        DataGridView dgv = new DataGridView();
-
-        // Adicionamos as colunas
-        dgv.Columns.Add("dgvColumn_ID", "ID");
-        dgv.Columns.Add("dgvColumn_NOME", "Nome");
-        dgv.Columns.Add("dgvColumn_EMAIL", "Email");
-        
-        // Criamos um array de strings com dados aleatórios e adicionamos à linha do DataGridView. 
-        string[] row = new string[] { "123", "John Doe", "30", "johndoe@teste.com.br", "Estagiário" };
-        dgv.Rows.Add(row);
-
-        // Agora crio meu dicionário declarando as chaves com os mesmos nomes das colunas do DataGridView.
-        public static Dictionary<string, string> usuario = new Dictionary<string, string>()
+        public static void Main()
         {
-            { "dgvColumn_ID", "ID" },
-            { "dgvColumn_NOME", "NOME" },
-            { "dgvColumn_EMAIL", "EMAIL" },
+            // Criamos um DataGridView e adicionamos as colunas.
+            DataGridView dgv = new DataGridView();
+
+            dgv.Columns.Add("dgvColumn_ID", "ID");
+            dgv.Columns.Add("dgvColumn_NOME", "Nome");
+            dgv.Columns.Add("dgvColumn_EMAIL", "Email");
+
+            // Criamos um array de strings com dados aleatórios e adicionamos à linha do DataGridView. 
+            string[] row = new string[] { "123", "John Doe", "johndoe@teste.com.br" };
+            dgv.Rows.Add(row);
+
+            // Agora crio meu dicionário declarando as chaves com os mesmos nomes das colunas do DataGridView e valor com os nomes das colunas no banco de dados.
+            Dictionary<string, string> usuario = new Dictionary<string, string>()
+            {
+                { "dgvColumn_ID", "ID" },
+                { "dgvColumn_NOME", "NOME" },
+                { "dgvColumn_EMAIL", "EMAIL" },
+            };
+
+            string query = RelacionamentoColunas(dgv, usuario);
+            // Por causa da lógica da função "RelacionamentoColunas" discriminada abaixo, a string "query" receberá a clausula insert "INSERT INTO TABELA_QUALQUER (ID, NOME, EMAIL) VALUES ("123", "John Doe", "johndoe@teste.com.br") 
+            // Com essa string você pode chamar a função de execução no banco de dados usando essa string.
         }
 
-        public static string RelacionamentoColunas(DataGridView dgv)
+        public static string RelacionamentoColunas(DataGridView dgv, Dictionary<string, string> usuario)
         {
-            // Vamos criar uma string que irá armazena a query de inserção de dados em uma tabela. Mas qual valor incluir? Aí entra meu looping no dictionary "usuarios".
+            string query = "";
 
-            // O loop percorre cada linha do dataGridView declarando em qual coluna irei inserir o valor e o valor que irei inserir e em seguinda, chama o segundo looping que percorre os valores do dicionário 
+            // Vamos criar uma string que irá armazena a query de inserção de dados em uma tabela. Mas qual valor incluir? Aí entra meu looping no dictionary "usuarios".
             for (int i = 0; i < dgv.Rows.Count; i++)
             {
                 string columnNames = "";
@@ -58,7 +65,7 @@ internal class Estruturas_Chaveadas
                     values += "'" + dgv.Rows[i].Cells[dgvColumnName].Value.ToString() + "', ";
 
                     /* Dessa forma "columnNames" receberá "NOME" e "values" receberá o valor de
-                       "dgvColumn_NOME" do DataGridView, que nesse caso será "john doe". */
+                        "dgvColumn_NOME" do DataGridView, que nesse caso será "john doe". */
                 }
 
                 // Pra não gerar o erro "comando não encerrado adequandamente" no banco de dados, retiro a virgula no final das strings.
@@ -67,10 +74,10 @@ internal class Estruturas_Chaveadas
 
                 // Por fim, adiciono a sequencia de nome de colunas que o loop guardou junto a seus valores. Garantindo que cada coluna receba o valor devido.
                 query += "INSERT INTO TABELA_QUALQUER (" + columnNames + ") VALUES (" + values + ")";
-                return query;
             }
-        }
-    }
+            return query;
+     }
+ }
 
 class Conjuntos
 {
