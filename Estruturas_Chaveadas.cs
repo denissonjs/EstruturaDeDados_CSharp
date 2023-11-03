@@ -1,11 +1,12 @@
 //
 using System;
 using System.Collection.Generic;
+using System.Windows.Forms;
 internal class Estruturas_Chaveadas
 {
-     class Dictionary
+    class Dictionary
     {
-        /*  Como mensionei no readme, dicionários funcionam com chave e valor.
+        /* Como mencionei no readme, dicionários funcionam com chave e valor.
         Um uso particularmente comum de dicionários é no relacionamento de colunas
         banco de dados com colunas de um DataGridView, que nada mais são que a
         representação visual de uma tabela em aplicações Windows form. */
@@ -14,20 +15,24 @@ internal class Estruturas_Chaveadas
             foi usado algumas vezes no projeto "Rotina9817_AnaliseDeCredito" 
             disponível também no meu GitHub. */
 
+       // O método main é o ponto de entrada da nossa aplicação. Ele cria um DataGridView (forma visual de uma tabela no C#) com três colunas, em seguida adiciona uma linha com dados e por fim um dicionário.
         public static void Main()
         {
-            // Criamos um DataGridView e adicionamos as colunas.
+            // Cria o DataGridView
             DataGridView dgv = new DataGridView();
 
+            // Adiciona as colunas.
             dgv.Columns.Add("dgvColumn_ID", "ID");
             dgv.Columns.Add("dgvColumn_NOME", "Nome");
             dgv.Columns.Add("dgvColumn_EMAIL", "Email");
 
-            // Criamos um array de strings com dados aleatórios e adicionamos à linha do DataGridView. 
+            // Cria os dados da aplicação. 
             string[] row = new string[] { "123", "John Doe", "johndoe@teste.com.br" };
+            
+            // Adiciona os dados criados acima ao DataGridView.
             dgv.Rows.Add(row);
 
-            // Agora crio meu dicionário declarando as chaves com os mesmos nomes das colunas do DataGridView e valor com os nomes das colunas no banco de dados.
+            // Cria o dicionário declarando nas chaves os mesmos nomes das colunas do DataGridView e no valor os nomes das colunas no banco de dados.
             Dictionary<string, string> usuario = new Dictionary<string, string>()
             {
                 { "dgvColumn_ID", "ID" },
@@ -36,7 +41,7 @@ internal class Estruturas_Chaveadas
             };
 
             string query = RelacionamentoColunas(dgv, usuario);
-            // Por causa da lógica da função "RelacionamentoColunas" discriminada abaixo, a string "query" receberá a clausula insert "INSERT INTO TABELA_QUALQUER (ID, NOME, EMAIL) VALUES ("123", "John Doe", "johndoe@teste.com.br") 
+            // Por causa da lógica da função "RelacionamentoColunas" declarada abaixo, a string "query" receberá a cláusula insert: "INSERT INTO TABELA_QUALQUER (ID, NOME, EMAIL) VALUES ("123", "John Doe", "johndoe@teste.com.br") 
             // Com essa string você pode chamar a função de execução no banco de dados usando essa string.
         }
 
@@ -44,7 +49,9 @@ internal class Estruturas_Chaveadas
         {
             string query = "";
 
-            // Vamos criar uma string que irá armazena a query de inserção de dados em uma tabela. Mas qual valor incluir? Aí entra meu looping no dictionary "usuarios".
+            // Vamos criar uma string que irá armazenar a query de inserção de dados em uma tabela. Mas qual valor incluir? Aí entra meu looping no dictionary "usuarios".
+            
+            // Esse looping irá iterar por todas as linhas do nosso DataGridView, que no nosso exemplo é somente uma.
             for (int i = 0; i < dgv.Rows.Count; i++)
             {
                 string columnNames = "";
@@ -64,15 +71,15 @@ internal class Estruturas_Chaveadas
                     // Aqui pego o valor definitivo de "dgvColumn_NOME" no dataGridView.
                     values += "'" + dgv.Rows[i].Cells[dgvColumnName].Value.ToString() + "', ";
 
-                    /* Dessa forma "columnNames" receberá "NOME" e "values" receberá o valor de
+                    /* Dessa forma, "columnNames" receberá "NOME" e "values" receberá o valor de
                         "dgvColumn_NOME" do DataGridView, que nesse caso será "john doe". */
                 }
 
-                // Pra não gerar o erro "comando não encerrado adequandamente" no banco de dados, retiro a virgula no final das strings.
+                // Pra não gerar o erro "comando não encerrado adequandamente" no banco de dados, retiro a vírgula no final das strings.
                 columnNames = columnNames.TrimEnd(',', ' ');
                 values = values.TrimEnd(',', ' ');
 
-                // Por fim, adiciono a sequencia de nome de colunas que o loop guardou junto a seus valores. Garantindo que cada coluna receba o valor devido.
+                // Por fim, adiciono a sequência de nome de colunas que o loop guardou junto a seus valores. Garantindo que cada coluna receba o valor devido.
                 query += "INSERT INTO TABELA_QUALQUER (" + columnNames + ") VALUES (" + values + ")";
             }
             return query;

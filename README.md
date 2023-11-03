@@ -27,9 +27,9 @@ Em uma aplicação prática, as pilhas podem ser usadas para registrar os menus 
 ## Filas
 As filas são estruturas de dados que funcionam de maneira semelhante às pilhas, mas com uma diferença fundamental: elas seguem o princípio de "primeiro a entrar, primeiro a sair" (FIFO - First In, First Out). Isso pode ser comparado a uma fila de banco, onde a primeira pessoa que chega é a primeira a ser atendida.
 
-No contexto da programação, as filas são usadas para gerenciar requisições. A primeira requisição feita será a primeira a ser respondida. Isso é útil em cenários onde a ordem das operações é importante.
+No contexto da programação, as filas são usadas para gerenciar a ordem de requisições. A primeira requisição feita será a primeira a ser respondida. Isso é útil em cenários onde a ordem das operações é importante.
 
-Por exemplo, se você quiser inserir um usuário no banco de dados e depois exibir seu nome na tela, você precisará garantir que a inserção do usuário seja concluída antes da impressão do nome. Sem uma fila, a impressão do nome pode ser chamada antes da inserção do usuário, resultando em um erro.
+Um projeto de agendamento de visita de fornecedores demonstra bem o uso dessa estrutura. Fornecedores definidos com menor prioridade sçao atendidos em modo de fila de espera, onde o primeiro a agendar é o primeiro a ser atendido.
 
 ## Arrays e Listas
 Arrays e listas podem ser comparados a caixas de sapato numeradas, também conhecidas como índices, onde você pode armazenar itens. Ambos podem armazenar qualquer tipo de dados, mas em C#, todos os dados devem ser do mesmo tipo.
